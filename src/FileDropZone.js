@@ -1,48 +1,52 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import FileUpload from 'material-ui-icons/FileUpload';
 
-const styles = {
-    dropzone: {
-        width: '400px',
-        height: '400px',
-        alignItems: 'center',
-    },
-    grid: {
-        direction: 'column',
-        justify: 'flex-start',
-        alignItems: 'center',
-    },
+/*
+File upload component
+    usage: <FileDropZone processFile={function}  acceptedFileTypes={String} styles={styles} />
+    processFile: Function implementation of onDrop(acceptedFiles, rejectedFiles)
+    acceptedFileTypes: space delimeted ex.'.xls, .xlsx, .csv'
+    styles: Styles for the dropzone
+    https://react-dropzone.js.org/
+*/
+
+const thisStyles = {
     icon: {
-        width: '400px',
-        height: '400px',
-        alignItems: 'center'
+      width: '75%',
+      height: '75%',
     },
-  }
-
-
-class FileDropZone extends React.Component {
-    
-    processFile(e){
-        console.log(e);
-        this.props.processFile(e);
+    text: {
+      textAlign: 'center',
+    },
+    dropzone: {
+        textAlign: 'center',
+        borderStyle: 'dashed',
+        width: '100%',
+        height: '100%',
     }
-    
-      render() {
-        return (
-            <div>
-                <Dropzone
-                    style={styles.dropzone}
-                    accept=".xls, .xlsx, .csv"
-                    onDrop={this.processFile.bind(this)}
-                >
-                    <FileUpload  style={styles.icon}/>
-                    <p >Drop your file here or click to select a file to upload.</p>
-                    <p>Only *.xls, *.xlsx and *.csv documents will be accepted</p>
-                </Dropzone>
-            </div>
-        );
-      }
-  }
-
+  };
+  
+  const FileDropZone = ({ processFile, acceptedFileTypes, styles }) => (
+    <div>
+      <Dropzone
+        style={{...thisStyles.dropzone, ...styles}}
+        accept={acceptedFileTypes}
+        onDrop={processFile}
+      >
+        <FileUpload style={thisStyles.icon} />
+        <p style={thisStyles.text}>Drag and drop files to upload or click to browse for a file</p>
+        <p style={thisStyles.text}>
+          Only the following extensions are allowed: {acceptedFileTypes}
+        </p>
+      </Dropzone>
+    </div>
+  );
+  
+  FileDropZone.propTypes = {
+    processFile: PropTypes.func.isRequired,
+    acceptedFileTypes: PropTypes.string.isRequired,
+    styles: PropTypes.shape({ width: PropTypes.string, height: PropTypes.string }),
+  };
 export default FileDropZone;

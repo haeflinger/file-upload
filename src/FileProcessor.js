@@ -1,8 +1,16 @@
 import React from 'react';
 import XLSX from 'xlsx';
+import Grid from 'material-ui/Grid';
 
 import FileDropZone from './FileDropZone';
 import PreviewTable from './PreviewTable';
+
+const dropZoneStyles = {
+        width: '400px',
+        height: '300px',
+      
+        
+  }
 
 export default class FileProcessor extends React.Component {
     constructor() {
@@ -14,7 +22,7 @@ export default class FileProcessor extends React.Component {
 		};
       }
 
-      processFile(acceptedFiles) {
+      processFile(acceptedFiles, rejectedFiles) {
         acceptedFiles.forEach(file => {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -34,14 +42,31 @@ export default class FileProcessor extends React.Component {
     
             reader.readAsBinaryString(file);
         })
+        console.log(rejectedFiles);
+       rejectedFiles.forEach(file => {
+            alert(`The file ${file.name} is not a valid xls, xlsx, or csv file.`)
+       });
     }
 
     render(){
+        const styles = dropZoneStyles;
         return (
-            <div>
-                <FileDropZone processFile={this.processFile.bind(this)} />
-                <PreviewTable data={this.state.data} cols={this.state.cols} fileName={this.state.fileName}/>
-            </div>
+            <Grid container spacing={24} justify="center">
+                <Grid item xs={12} >
+                    <FileDropZone 
+                        processFile={this.processFile.bind(this)} 
+                        acceptedFileTypes='.xls, .xlsx, .csv'
+                        styles={styles} 
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <PreviewTable 
+                        data={this.state.data} 
+                        cols={this.state.cols} 
+                        fileName={this.state.fileName}
+                    />
+                </Grid>
+            </Grid>
         )
     }
 } 
