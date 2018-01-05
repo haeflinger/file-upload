@@ -29,7 +29,6 @@ const thisStyles = {
   };
   
   const FileDropZone = ({ processFile, acceptedFileTypes, styles }) => (
-    <div>
       <Dropzone
         style={{...thisStyles.dropzone, ...styles}}
         accept={acceptedFileTypes}
@@ -41,7 +40,6 @@ const thisStyles = {
           Only the following extensions are allowed: {acceptedFileTypes}
         </p>
       </Dropzone>
-    </div>
   );
   
   FileDropZone.propTypes = {
